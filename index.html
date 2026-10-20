@@ -56,7 +56,8 @@
                 </ul>
                 <div class="visual-guide-area">
                     <div class="placeholder-image">
-                        <span>📷 Zona visual (Imagen 1)</span>
+                        <!-- Aquí va la imagen dinámica -->
+                        <img id="img-posicionamiento" src="imagen1.jpg" alt="Guía visual de posicionamiento">
                     </div>
                     <div class="guide-details">
                         <p><strong>Chasis:</strong> 14x17 pulgadas</p>
@@ -113,10 +114,11 @@
                 <p>Simulador interactivo</p>
             </div>
             <div class="anatomia-layout">
-                <p style="margin-bottom: 1rem; color: var(--text-muted);">Identifica la estructura en la <strong>Imagen 2</strong>:</p>
+                <p style="margin-bottom: 1rem; color: var(--text-muted);">Identifica la estructura resaltada:</p>
                 <div class="visual-guide-area">
                     <div class="placeholder-image">
-                        <span>🦴 Zona visual (Imagen 2)</span>
+                        <!-- Imagen estática para el Quiz -->
+                        <img id="img-anatomia" src="imagen4.jpg" alt="Radiografía para adivinar">
                     </div>
                 </div>
                 <div class="opciones-anatomia">
@@ -147,9 +149,7 @@
             </form>
             <div class="historial-dosimetria">
                 <h3>Historial Local</h3>
-                <ul id="lista-dosimetria" class="registro-lista">
-                    <!-- Registros dinámicos -->
-                </ul>
+                <ul id="lista-dosimetria" class="registro-lista"></ul>
             </div>
         </section>
 
