@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // 0. REGISTRO DEL SERVICE WORKER (Para Modo Offline - Regla 5)
+    // 0. REGISTRO DEL SERVICE WORKER
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js')
         .then(reg => console.log('Service Worker registrado con éxito', reg))
         .catch(err => console.error('Error al registrar Service Worker', err));
     }
 
-    // 1. Animación inicial del menú (anime.js)
+    // 1. Animación inicial del menú
     anime({
         targets: '.module-card',
         translateY: [30, 0],
@@ -44,9 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navButtons.forEach(btn => {
         btn.addEventListener('click', (e) => {
             const moduleId = e.currentTarget.id.replace('btn-', 'view-');
-            if (document.getElementById(moduleId)) {
-                navigateTo(moduleId);
-            }
+            if (document.getElementById(moduleId)) navigateTo(moduleId);
         });
     });
 
@@ -58,26 +56,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================
-    // 3. LÓGICA DE POSICIONAMIENTO (Escalable)
+    // 3. LÓGICA DE POSICIONAMIENTO CON IMÁGENES REALES
     // ==========================================
     const datosPosicionamiento = {
         'Tórax PA': {
             chasis: '14x17 pulgadas',
             rayo: 'Perpendicular a T7 (aprox. 18-20 cm debajo de vértebra prominente)',
             distancia: '180 cm (72")',
-            imagen: '📷 Tórax PA (Imagen 1)'
+            imagen: 'imagen1.jpg' // Vinculado al nombre exacto en tu repositorio
         },
         'Cráneo AP': {
             chasis: '10x12 pulgadas longitudinal',
             rayo: 'Perpendicular al nasión',
             distancia: '100 cm (40")',
-            imagen: '📷 Cráneo AP (Imagen 1)'
+            imagen: 'imagen2.jpg'
         },
         'Mano PA': {
             chasis: '10x12 pulgadas transversal',
             rayo: 'Perpendicular a la 3ra articulación metacarpofalángica',
             distancia: '100 cm (40")',
-            imagen: '📷 Mano PA (Imagen 1)'
+            imagen: 'imagen3.jpg'
         }
     };
 
@@ -85,11 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const detalleChasis = document.querySelector('#view-posicionamiento .guide-details p:nth-child(1)');
     const detalleRayo = document.querySelector('#view-posicionamiento .guide-details p:nth-child(2)');
     const detalleDistancia = document.querySelector('#view-posicionamiento .guide-details p:nth-child(3)');
-    const zonaVisualPos = document.querySelector('#view-posicionamiento .placeholder-image span');
+    const zonaVisualPos = document.getElementById('img-posicionamiento'); // Seleccionamos la etiqueta img
 
     listaPartes.forEach(item => {
         item.addEventListener('click', (e) => {
-            // Quitar clase activa a todos y ponerla al seleccionado
             listaPartes.forEach(li => li.classList.remove('active-part'));
             e.target.classList.add('active-part');
 
@@ -97,22 +94,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = datosPosicionamiento[nombreParte];
 
             if(data) {
-                // Actualizar textos dinámicamente
                 detalleChasis.innerHTML = `<strong>Chasis:</strong> ${data.chasis}`;
                 detalleRayo.innerHTML = `<strong>Rayo Central:</strong> ${data.rayo}`;
                 detalleDistancia.innerHTML = `<strong>Distancia:</strong> ${data.distancia}`;
-                zonaVisualPos.textContent = data.imagen;
+                
+                // Cambiar el source de la imagen dinámicamente
+                zonaVisualPos.src = data.imagen;
 
-                // Pequeña animación al cambiar datos
-                anime({ targets: '.guide-details, .placeholder-image', opacity: [0, 1], duration: 400, easing: 'easeOutQuad' });
+                anime({ targets: '.guide-details, #img-posicionamiento', opacity: [0, 1], duration: 400, easing: 'easeOutQuad' });
             }
         });
     });
 
     // ==========================================
-    // 4. LÓGICA DE ANATOMÍA (Simulador/Quiz)
+    // 4. LÓGICA DE ANATOMÍA (Simulador)
     // ==========================================
-    // Datos escalables. Luego podemos agregar arrays completos de preguntas.
     const preguntaActual = {
         respuestaCorrecta: 'A) Clavícula'
     };
@@ -123,7 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
         boton.addEventListener('click', (e) => {
             const respuestaUsuario = e.target.textContent;
 
-            // Deshabilitar botones tras responder
             botonesQuiz.forEach(b => b.disabled = true);
 
             if (respuestaUsuario === preguntaActual.respuestaCorrecta) {
@@ -131,19 +126,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 anime({ targets: e.target, scale: [1, 1.05, 1], duration: 400 });
             } else {
                 e.target.classList.add('incorrecto');
-                // Vibración de error con anime.js
                 anime({ targets: e.target, translateX: [0, -5, 5, -5, 5, 0], duration: 400 });
                 
-                // Mostrar cuál era la correcta
                 botonesQuiz.forEach(b => {
                     if(b.textContent === preguntaActual.respuestaCorrecta) b.classList.add('correcto');
                 });
             }
-            
-            // Aquí en el futuro agregaremos un botón de "Siguiente pregunta"
         });
     });
-
 
     // ==========================================
     // 5. CALCULADORA kVp/mAs
