@@ -1,6 +1,5 @@
-const CACHE_NAME = 'radiologia-pro-v2'; // Subimos la versión para que los teléfonos actualicen los archivos
+const CACHE_NAME = 'radiologia-pro-v3'; 
 
-// Lista actualizada con los nombres de las 4 imágenes reales
 const assetsToCache = [
   './',
   './index.html',
@@ -18,7 +17,7 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Archivos e imágenes cacheados exitosamente');
+        console.log('Archivos e imágenes cacheados exitosamente - Versión 3');
         return cache.addAll(assetsToCache);
       })
   );
