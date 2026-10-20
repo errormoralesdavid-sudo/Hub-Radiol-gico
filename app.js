@@ -7,15 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(err => console.error('Error al registrar Service Worker', err));
     }
 
-    // 1. Animación inicial del menú
-    anime({
-        targets: '.module-card',
-        translateY: [30, 0],
-        opacity: [0, 1],
-        delay: anime.stagger(100),
-        easing: 'easeOutQuad',
-        duration: 500
-    });
+    // 1. ANIMACIÓN INICIAL DEL MENÚ
+    anime({ targets: '.module-card', translateY: [30, 0], opacity: [0, 1], delay: anime.stagger(100), easing: 'easeOutQuad', duration: 500 });
 
     // 2. NAVEGACIÓN SPA
     const views = document.querySelectorAll('.view');
@@ -23,22 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const backButtons = document.querySelectorAll('.btn-back');
 
     function navigateTo(targetId) {
-        views.forEach(view => {
-            view.classList.remove('active');
-            view.classList.add('hidden');
-        });
-
+        views.forEach(view => { view.classList.remove('active'); view.classList.add('hidden'); });
         const targetView = document.getElementById(targetId);
         targetView.classList.remove('hidden');
         targetView.classList.add('active');
-
-        anime({
-            targets: targetView,
-            opacity: [0, 1],
-            translateY: [15, 0],
-            duration: 400,
-            easing: 'easeOutSine'
-        });
+        anime({ targets: targetView, opacity: [0, 1], translateY: [15, 0], duration: 400, easing: 'easeOutSine' });
     }
 
     navButtons.forEach(btn => {
@@ -49,100 +31,148 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     backButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const targetId = e.currentTarget.getAttribute('data-target');
-            navigateTo(targetId);
-        });
+        btn.addEventListener('click', (e) => { navigateTo(e.currentTarget.getAttribute('data-target')); });
     });
 
     // ==========================================
-    // 3. LÓGICA DE POSICIONAMIENTO CON IMÁGENES REALES
+    // 3. LÓGICA DE POSICIONAMIENTO
     // ==========================================
     const datosPosicionamiento = {
-        'Tórax PA': {
-            chasis: '14x17 pulgadas',
-            rayo: 'Perpendicular a T7 (aprox. 18-20 cm debajo de vértebra prominente)',
-            distancia: '180 cm (72")',
-            imagen: 'imagen1.jpg' // Vinculado al nombre exacto en tu repositorio
-        },
-        'Cráneo AP': {
-            chasis: '10x12 pulgadas longitudinal',
-            rayo: 'Perpendicular al nasión',
-            distancia: '100 cm (40")',
-            imagen: 'imagen2.jpg'
-        },
-        'Mano PA': {
-            chasis: '10x12 pulgadas transversal',
-            rayo: 'Perpendicular a la 3ra articulación metacarpofalángica',
-            distancia: '100 cm (40")',
-            imagen: 'imagen3.jpg'
-        }
+        'Tórax PA': { chasis: '14x17 pulgadas', rayo: 'Perpendicular a T7', distancia: '180 cm (72")', imagen: 'imagen1.jpg' },
+        'Cráneo AP': { chasis: '10x12 pulgadas longitudinal', rayo: 'Perpendicular al nasión', distancia: '100 cm (40")', imagen: 'imagen2.jpg' },
+        'Mano PA': { chasis: '10x12 pulgadas transversal', rayo: 'Perpendicular a 3ra art. metacarpofalángica', distancia: '100 cm (40")', imagen: 'imagen3.jpg' }
     };
 
     const listaPartes = document.querySelectorAll('.body-parts-list li');
-    const detalleChasis = document.querySelector('#view-posicionamiento .guide-details p:nth-child(1)');
-    const detalleRayo = document.querySelector('#view-posicionamiento .guide-details p:nth-child(2)');
-    const detalleDistancia = document.querySelector('#view-posicionamiento .guide-details p:nth-child(3)');
-    const zonaVisualPos = document.getElementById('img-posicionamiento'); // Seleccionamos la etiqueta img
+    const zonaVisualPos = document.getElementById('img-posicionamiento');
 
     listaPartes.forEach(item => {
         item.addEventListener('click', (e) => {
             listaPartes.forEach(li => li.classList.remove('active-part'));
             e.target.classList.add('active-part');
-
-            const nombreParte = e.target.textContent;
-            const data = datosPosicionamiento[nombreParte];
-
+            const data = datosPosicionamiento[e.target.textContent];
             if(data) {
-                detalleChasis.innerHTML = `<strong>Chasis:</strong> ${data.chasis}`;
-                detalleRayo.innerHTML = `<strong>Rayo Central:</strong> ${data.rayo}`;
-                detalleDistancia.innerHTML = `<strong>Distancia:</strong> ${data.distancia}`;
-                
-                // Cambiar el source de la imagen dinámicamente
+                document.querySelector('#view-posicionamiento .guide-details p:nth-child(1)').innerHTML = `<strong>Chasis:</strong> ${data.chasis}`;
+                document.querySelector('#view-posicionamiento .guide-details p:nth-child(2)').innerHTML = `<strong>Rayo Central:</strong> ${data.rayo}`;
+                document.querySelector('#view-posicionamiento .guide-details p:nth-child(3)').innerHTML = `<strong>Distancia:</strong> ${data.distancia}`;
                 zonaVisualPos.src = data.imagen;
-
                 anime({ targets: '.guide-details, #img-posicionamiento', opacity: [0, 1], duration: 400, easing: 'easeOutQuad' });
             }
         });
     });
 
     // ==========================================
-    // 4. LÓGICA DE ANATOMÍA (Simulador)
+    // 4. LÓGICA DE ANATOMÍA (NUEVO SIMULADOR DE EVALUACIÓN)
     // ==========================================
-    const preguntaActual = {
-        respuestaCorrecta: 'A) Clavícula'
-    };
+    let puntuacionActual = 0;
+    let preguntaIndex = 0;
 
-    const botonesQuiz = document.querySelectorAll('.btn-opcion');
-    
-    botonesQuiz.forEach(boton => {
-        boton.addEventListener('click', (e) => {
-            const respuestaUsuario = e.target.textContent;
+    // Puedes escalar este array agregando tantas preguntas como quieras
+    const preguntasAnatomia = [
+        {
+            pregunta: '¿Qué hueso se muestra principalmente en la radiografía de la Imagen 4?',
+            imagen: 'imagen4.jpg',
+            opciones: ['A) Clavícula', 'B) Escápula', 'C) Esternón'],
+            correcta: 'A) Clavícula'
+        },
+        {
+            pregunta: 'Según la Imagen 1, ¿qué proyección radiológica estamos viendo?',
+            imagen: 'imagen1.jpg',
+            opciones: ['A) Abdomen AP', 'B) Tórax PA', 'C) Tórax Lateral'],
+            correcta: 'B) Tórax PA'
+        },
+        {
+            pregunta: '¿Cuál es la distancia focal ideal recomendada para tomar la radiografía de la Imagen 1 (Tórax)?',
+            imagen: 'imagen1.jpg',
+            opciones: ['A) 100 cm', 'B) 120 cm', 'C) 180 cm'],
+            correcta: 'C) 180 cm'
+        }
+    ];
 
-            botonesQuiz.forEach(b => b.disabled = true);
+    const quizQuestionEl = document.getElementById('quiz-question');
+    const quizImgEl = document.getElementById('img-anatomia');
+    const quizOptionsContainer = document.getElementById('quiz-options');
+    const quizProgressEl = document.getElementById('quiz-progress');
+    const quizScoreEl = document.getElementById('quiz-score');
+    const btnNextQuestion = document.getElementById('btn-next-question');
 
-            if (respuestaUsuario === preguntaActual.respuestaCorrecta) {
-                e.target.classList.add('correcto');
-                anime({ targets: e.target, scale: [1, 1.05, 1], duration: 400 });
+    function cargarPregunta() {
+        // Verificar si ya terminamos todas las preguntas
+        if (preguntaIndex >= preguntasAnatomia.length) {
+            quizQuestionEl.innerHTML = `¡Simulador completado! Puntuación final: <strong>${puntuacionActual} de ${preguntasAnatomia.length}</strong>`;
+            quizImgEl.src = 'imagen4.jpg'; // Imagen de cierre por defecto
+            quizOptionsContainer.innerHTML = ''; // Vaciar botones
+            btnNextQuestion.textContent = 'Reiniciar Simulador';
+            btnNextQuestion.classList.remove('hidden');
+            return;
+        }
+
+        // Cargar datos de la pregunta actual
+        const data = preguntasAnatomia[preguntaIndex];
+        quizQuestionEl.textContent = data.pregunta;
+        quizImgEl.src = data.imagen;
+        quizProgressEl.textContent = `Pregunta ${preguntaIndex + 1} de ${preguntasAnatomia.length}`;
+        quizOptionsContainer.innerHTML = ''; 
+        btnNextQuestion.classList.add('hidden'); // Ocultar botón "Siguiente" hasta que responda
+
+        // Generar botones de opciones automáticamente
+        data.opciones.forEach(opcion => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-opcion';
+            btn.textContent = opcion;
+            btn.addEventListener('click', (e) => evaluarRespuesta(e, data.correcta));
+            quizOptionsContainer.appendChild(btn);
+        });
+        
+        anime({ targets: '.anatomia-layout', opacity: [0, 1], duration: 400, easing: 'easeOutQuad' });
+    }
+
+    function evaluarRespuesta(evento, correcta) {
+        const botones = document.querySelectorAll('#quiz-options .btn-opcion');
+        botones.forEach(b => b.disabled = true); // Bloquear opciones tras tocar
+
+        if (evento.target.textContent === correcta) {
+            evento.target.classList.add('correcto');
+            puntuacionActual++;
+            quizScoreEl.textContent = puntuacionActual;
+            anime({ targets: evento.target, scale: [1, 1.05, 1], duration: 400 });
+        } else {
+            evento.target.classList.add('incorrecto');
+            anime({ targets: evento.target, translateX: [0, -5, 5, -5, 5, 0], duration: 400 }); // Vibración de error
+            
+            // Iluminar la respuesta que era correcta para que el estudiante aprenda
+            botones.forEach(b => {
+                if (b.textContent === correcta) b.classList.add('correcto');
+            });
+        }
+        btnNextQuestion.classList.remove('hidden'); // Mostrar botón de avanzar
+    }
+
+    // Lógica del botón "Siguiente" o "Reiniciar"
+    if(btnNextQuestion) {
+        btnNextQuestion.addEventListener('click', () => {
+            if (preguntaIndex >= preguntasAnatomia.length) {
+                // Reiniciar el quiz
+                puntuacionActual = 0;
+                preguntaIndex = 0;
+                quizScoreEl.textContent = puntuacionActual;
+                btnNextQuestion.textContent = 'Siguiente Pregunta';
+                cargarPregunta();
             } else {
-                e.target.classList.add('incorrecto');
-                anime({ targets: e.target, translateX: [0, -5, 5, -5, 5, 0], duration: 400 });
-                
-                botonesQuiz.forEach(b => {
-                    if(b.textContent === preguntaActual.respuestaCorrecta) b.classList.add('correcto');
-                });
+                // Avanzar a la siguiente
+                preguntaIndex++;
+                cargarPregunta();
             }
         });
-    });
+        
+        // Iniciar el quiz la primera vez que se carga la app
+        cargarPregunta();
+    }
 
     // ==========================================
     // 5. CALCULADORA kVp/mAs
     // ==========================================
     const calcForm = document.getElementById('calc-form');
-    const calcResult = document.getElementById('calc-result');
-    const resKvp = document.getElementById('res-kvp');
-    const resMas = document.getElementById('res-mas');
-
     if (calcForm) {
         calcForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -154,9 +184,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (region === 'torax') { constanteEquipo = 50; factorMas = 0.5; } 
             else if (region === 'extremidad') { constanteEquipo = 30; factorMas = 2; }
 
-            resKvp.textContent = Math.round((grosor * 2) + constanteEquipo);
-            resMas.textContent = Math.round(grosor * factorMas);
-            calcResult.classList.remove('hidden');
+            document.getElementById('res-kvp').textContent = Math.round((grosor * 2) + constanteEquipo);
+            document.getElementById('res-mas').textContent = Math.round(grosor * factorMas);
+            document.getElementById('calc-result').classList.remove('hidden');
             anime({ targets: ['.values-grid .number'], scale: [0.8, 1], opacity: [0, 1], duration: 500, easing: 'easeOutElastic(1, .8)' });
         });
     }
@@ -165,9 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 6. DOSIMETRÍA (Almacenamiento Local)
     // ==========================================
     const formDosimetria = document.getElementById('dosimetria-form');
-    const listaDosimetria = document.getElementById('lista-dosimetria');
-
     function cargarHistorial() {
+        const listaDosimetria = document.getElementById('lista-dosimetria');
         listaDosimetria.innerHTML = '';
         const registros = JSON.parse(localStorage.getItem('historialDosimetria')) || [];
         if (registros.length === 0) {
