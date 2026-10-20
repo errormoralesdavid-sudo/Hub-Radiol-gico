@@ -94,14 +94,28 @@ body {
 .body-parts-list li.active-part { background: var(--primary-color); color: white; }
 
 .visual-guide-area { background: var(--card-bg); border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem; }
-.placeholder-image { height: 200px; background: #2a2a2a; display: flex; align-items: center; justify-content: center; color: var(--text-muted); text-align: center; padding: 1rem;}
+
+/* Ajustes para las radiografías reales */
+.placeholder-image { 
+    height: 250px; /* Más espacio vertical para la foto */
+    background: #000; /* Fondo negro como un negatoscopio real */
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    overflow: hidden;
+}
+.placeholder-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Evita que la radiografía se deforme o se corte */
+}
+
 .guide-details { padding: 1.5rem; line-height: 1.6; }
 
 .opciones-anatomia { display: grid; grid-template-columns: 1fr; gap: 0.8rem; }
 .btn-opcion { background: var(--bg-color); color: var(--text-main); border: 1px solid var(--primary-color); padding: 1rem; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: all 0.3s; }
-.btn-opcion:hover { background: var(--primary-color); }
+.btn-opcion:hover:not(:disabled) { background: var(--primary-color); }
 
-/* Clases dinámicas para el Simulador (Acierto/Error) */
 .btn-opcion.correcto { background: var(--success-bg); border-color: var(--success-bg); color: white; }
 .btn-opcion.incorrecto { background: var(--error-bg); border-color: var(--error-bg); color: white; opacity: 0.7; }
 .btn-opcion:disabled { cursor: not-allowed; }
