@@ -8,6 +8,8 @@
     --accent: #e9d8a6;
     --danger-bg: #4a1515;
     --danger-text: #ff9999;
+    --success-bg: #2a9d8f;
+    --error-bg: #e76f51;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     --radius: 16px;
 }
@@ -88,18 +90,23 @@ body {
 .posicionamiento-layout, .anatomia-layout { display: flex; flex-direction: column; gap: 1.5rem; }
 
 .body-parts-list { display: flex; overflow-x: auto; gap: 0.5rem; list-style: none; padding-bottom: 0.5rem; }
-.body-parts-list li { background: var(--card-bg); padding: 0.5rem 1rem; border-radius: 20px; white-space: nowrap; cursor: pointer; color: var(--text-muted); }
+.body-parts-list li { background: var(--card-bg); padding: 0.5rem 1rem; border-radius: 20px; white-space: nowrap; cursor: pointer; color: var(--text-muted); transition: all 0.3s; }
 .body-parts-list li.active-part { background: var(--primary-color); color: white; }
 
 .visual-guide-area { background: var(--card-bg); border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem; }
-.placeholder-image { height: 200px; background: #2a2a2a; display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
+.placeholder-image { height: 200px; background: #2a2a2a; display: flex; align-items: center; justify-content: center; color: var(--text-muted); text-align: center; padding: 1rem;}
 .guide-details { padding: 1.5rem; line-height: 1.6; }
 
 .opciones-anatomia { display: grid; grid-template-columns: 1fr; gap: 0.8rem; }
-.btn-opcion { background: var(--bg-color); color: var(--text-main); border: 1px solid var(--primary-color); padding: 1rem; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: background 0.2s; }
+.btn-opcion { background: var(--bg-color); color: var(--text-main); border: 1px solid var(--primary-color); padding: 1rem; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: all 0.3s; }
 .btn-opcion:hover { background: var(--primary-color); }
 
-/* Formularios (Calculadora y Dosimetría) */
+/* Clases dinámicas para el Simulador (Acierto/Error) */
+.btn-opcion.correcto { background: var(--success-bg); border-color: var(--success-bg); color: white; }
+.btn-opcion.incorrecto { background: var(--error-bg); border-color: var(--error-bg); color: white; opacity: 0.7; }
+.btn-opcion:disabled { cursor: not-allowed; }
+
+/* Formularios */
 .calc-form { background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); margin-bottom: 1.5rem; }
 .input-group { margin-bottom: 1.5rem; }
 .input-group label { display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem; }
@@ -107,7 +114,6 @@ body {
 
 .btn-primary { width: 100%; padding: 1rem; background: var(--primary-color); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; }
 
-/* Resultados Calculadora */
 .result-card { background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); text-align: center; }
 .values-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
 .value-box { background: var(--bg-color); padding: 1rem; border-radius: 8px; }
