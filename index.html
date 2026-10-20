@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub Radiológico PRO</title>
+    <!-- Enlace al Manifest para PWA -->
+    <link rel="manifest" href="manifest.json">
+    <!-- Enlace a los estilos -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="app-header">
+        <h1>Radiología PRO</h1>
+        <p>Tu asistente clínico de bolsillo</p>
+    </header>
+
+    <main class="dashboard">
+        <!-- Módulo 1 -->
+        <button class="module-card" id="btn-posicionamiento">
+            <div class="card-icon">🧍</div>
+            <h2>Posicionamiento</h2>
+            <p>Guía visual y ángulos</p>
+        </button>
+
+        <!-- Módulo 2 -->
+        <button class="module-card" id="btn-calculadora">
+            <div class="card-icon">⚡</div>
+            <h2>Técnicas (kVp/mAs)</h2>
+            <p>Calculadora de exposición</p>
+        </button>
+
+        <!-- Módulo 3 -->
+        <button class="module-card" id="btn-anatomia">
+            <div class="card-icon">🦴</div>
+            <h2>Anatomía</h2>
+            <p>Simulador visual</p>
+        </button>
+
+        <!-- Módulo 4 -->
+        <button class="module-card" id="btn-dosimetria">
+            <div class="card-icon">🛡️</div>
+            <h2>Dosimetría</h2>
+            <p>Control de bioseguridad</p>
+        </button>
+    </main>
+
+    <!-- Librería anime.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <!-- Lógica de nuestra app -->
+    <script src="app.js"></script>
+</body>
+</html>
