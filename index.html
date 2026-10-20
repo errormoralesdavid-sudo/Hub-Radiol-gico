@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hub Radiológico PRO</title>
-    <!-- Enlace al Manifest para PWA -->
     <link rel="manifest" href="manifest.json">
-    <!-- Enlace a los estilos -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,12 +13,9 @@
         <p>Tu asistente clínico de bolsillo</p>
     </header>
 
-    <!-- Contenedor Maestro de la App (SPA) -->
     <main class="app-container">
         
-        <!-- ==========================================
-             VISTA 1: MENÚ PRINCIPAL (DASHBOARD)
-        =========================================== -->
+        <!-- VISTA 1: MENÚ PRINCIPAL -->
         <section id="view-dashboard" class="view active">
             <div class="dashboard">
                 <button class="module-card" id="btn-posicionamiento">
@@ -46,30 +41,21 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             VISTA 2: GUÍA DE POSICIONAMIENTO
-        =========================================== -->
+        <!-- VISTA 2: POSICIONAMIENTO -->
         <section id="view-posicionamiento" class="view hidden">
             <button class="btn-back" data-target="view-dashboard">⬅ Volver al Menú</button>
-            
             <div class="module-header">
                 <h2>Posicionamiento</h2>
                 <p>Selecciona una región anatómica</p>
             </div>
-
             <div class="posicionamiento-layout">
-                <!-- Lista lateral de regiones -->
                 <ul class="body-parts-list">
                     <li class="active-part">Tórax PA</li>
                     <li>Cráneo AP</li>
                     <li>Mano PA</li>
-                    <li>Columna Cervical</li>
                 </ul>
-                
-                <!-- Área principal de la guía -->
                 <div class="visual-guide-area">
                     <div class="placeholder-image">
-                        <!-- Aquí cargaremos la Imagen 1 o animación -->
                         <span>📷 Zona visual (Imagen 1)</span>
                     </div>
                     <div class="guide-details">
@@ -81,17 +67,13 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             VISTA 3: CALCULADORA DE TÉCNICAS
-        =========================================== -->
+        <!-- VISTA 3: CALCULADORA -->
         <section id="view-calculadora" class="view hidden">
             <button class="btn-back" data-target="view-dashboard">⬅ Volver al Menú</button>
-            
             <div class="module-header">
                 <h2>Calculadora kVp/mAs</h2>
                 <p>Cálculo seguro basado en grosor</p>
             </div>
-
             <form id="calc-form" class="calc-form">
                 <div class="input-group">
                     <label for="region">Región a radiografiar:</label>
@@ -107,8 +89,6 @@
                 </div>
                 <button type="submit" class="btn-primary">Calcular Técnica</button>
             </form>
-
-            <!-- Resultados (Ocultos hasta calcular) -->
             <div id="calc-result" class="result-card hidden">
                 <h3>Valores Sugeridos</h3>
                 <div class="values-grid">
@@ -125,9 +105,56 @@
             </div>
         </section>
 
+        <!-- VISTA 4: ANATOMÍA -->
+        <section id="view-anatomia" class="view hidden">
+            <button class="btn-back" data-target="view-dashboard">⬅ Volver al Menú</button>
+            <div class="module-header">
+                <h2>Anatomía</h2>
+                <p>Simulador interactivo</p>
+            </div>
+            <div class="anatomia-layout">
+                <p style="margin-bottom: 1rem; color: var(--text-muted);">Identifica la estructura en la <strong>Imagen 2</strong>:</p>
+                <div class="visual-guide-area">
+                    <div class="placeholder-image">
+                        <span>🦴 Zona visual (Imagen 2)</span>
+                    </div>
+                </div>
+                <div class="opciones-anatomia">
+                    <button class="btn-opcion">A) Clavícula</button>
+                    <button class="btn-opcion">B) Escápula</button>
+                    <button class="btn-opcion">C) Esternón</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISTA 5: DOSIMETRÍA -->
+        <section id="view-dosimetria" class="view hidden">
+            <button class="btn-back" data-target="view-dashboard">⬅ Volver al Menú</button>
+            <div class="module-header">
+                <h2>Dosimetría</h2>
+                <p>Registro personal de exposición</p>
+            </div>
+            <form id="dosimetria-form" class="calc-form">
+                <div class="input-group">
+                    <label for="mes-registro">Mes de evaluación:</label>
+                    <input type="month" id="mes-registro" required>
+                </div>
+                <div class="input-group">
+                    <label for="dosis-msv">Dosis recibida (mSv):</label>
+                    <input type="number" id="dosis-msv" step="0.01" min="0" placeholder="Ej: 0.15" required>
+                </div>
+                <button type="submit" class="btn-primary">Guardar Registro</button>
+            </form>
+            <div class="historial-dosimetria">
+                <h3>Historial Local</h3>
+                <ul id="lista-dosimetria" class="registro-lista">
+                    <!-- Registros dinámicos -->
+                </ul>
+            </div>
+        </section>
+
     </main>
 
-    <!-- Librerías y Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="app.js"></script>
 </body>
