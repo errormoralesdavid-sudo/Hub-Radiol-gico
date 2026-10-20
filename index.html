@@ -15,39 +15,120 @@
         <p>Tu asistente clínico de bolsillo</p>
     </header>
 
-    <main class="dashboard">
-        <!-- Módulo 1 -->
-        <button class="module-card" id="btn-posicionamiento">
-            <div class="card-icon">🧍</div>
-            <h2>Posicionamiento</h2>
-            <p>Guía visual y ángulos</p>
-        </button>
+    <!-- Contenedor Maestro de la App (SPA) -->
+    <main class="app-container">
+        
+        <!-- ==========================================
+             VISTA 1: MENÚ PRINCIPAL (DASHBOARD)
+        =========================================== -->
+        <section id="view-dashboard" class="view active">
+            <div class="dashboard">
+                <button class="module-card" id="btn-posicionamiento">
+                    <div class="card-icon">🧍</div>
+                    <h2>Posicionamiento</h2>
+                    <p>Guía visual y ángulos</p>
+                </button>
+                <button class="module-card" id="btn-calculadora">
+                    <div class="card-icon">⚡</div>
+                    <h2>Técnicas (kVp/mAs)</h2>
+                    <p>Calculadora de exposición</p>
+                </button>
+                <button class="module-card" id="btn-anatomia">
+                    <div class="card-icon">🦴</div>
+                    <h2>Anatomía</h2>
+                    <p>Simulador visual</p>
+                </button>
+                <button class="module-card" id="btn-dosimetria">
+                    <div class="card-icon">🛡️</div>
+                    <h2>Dosimetría</h2>
+                    <p>Control de bioseguridad</p>
+                </button>
+            </div>
+        </section>
 
-        <!-- Módulo 2 -->
-        <button class="module-card" id="btn-calculadora">
-            <div class="card-icon">⚡</div>
-            <h2>Técnicas (kVp/mAs)</h2>
-            <p>Calculadora de exposición</p>
-        </button>
+        <!-- ==========================================
+             VISTA 2: GUÍA DE POSICIONAMIENTO
+        =========================================== -->
+        <section id="view-posicionamiento" class="view hidden">
+            <button class="btn-back" data-target="view-dashboard">⬅ Volver al Menú</button>
+            
+            <div class="module-header">
+                <h2>Posicionamiento</h2>
+                <p>Selecciona una región anatómica</p>
+            </div>
 
-        <!-- Módulo 3 -->
-        <button class="module-card" id="btn-anatomia">
-            <div class="card-icon">🦴</div>
-            <h2>Anatomía</h2>
-            <p>Simulador visual</p>
-        </button>
+            <div class="posicionamiento-layout">
+                <!-- Lista lateral de regiones -->
+                <ul class="body-parts-list">
+                    <li class="active-part">Tórax PA</li>
+                    <li>Cráneo AP</li>
+                    <li>Mano PA</li>
+                    <li>Columna Cervical</li>
+                </ul>
+                
+                <!-- Área principal de la guía -->
+                <div class="visual-guide-area">
+                    <div class="placeholder-image">
+                        <!-- Aquí cargaremos la Imagen 1 o animación -->
+                        <span>📷 Zona visual (Imagen 1)</span>
+                    </div>
+                    <div class="guide-details">
+                        <p><strong>Chasis:</strong> 14x17 pulgadas</p>
+                        <p><strong>Rayo Central:</strong> Perpendicular a T7</p>
+                        <p><strong>Distancia:</strong> 180 cm (72")</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <!-- Módulo 4 -->
-        <button class="module-card" id="btn-dosimetria">
-            <div class="card-icon">🛡️</div>
-            <h2>Dosimetría</h2>
-            <p>Control de bioseguridad</p>
-        </button>
+        <!-- ==========================================
+             VISTA 3: CALCULADORA DE TÉCNICAS
+        =========================================== -->
+        <section id="view-calculadora" class="view hidden">
+            <button class="btn-back" data-target="view-dashboard">⬅ Volver al Menú</button>
+            
+            <div class="module-header">
+                <h2>Calculadora kVp/mAs</h2>
+                <p>Cálculo seguro basado en grosor</p>
+            </div>
+
+            <form id="calc-form" class="calc-form">
+                <div class="input-group">
+                    <label for="region">Región a radiografiar:</label>
+                    <select id="region">
+                        <option value="torax">Tórax</option>
+                        <option value="abdomen">Abdomen</option>
+                        <option value="extremidad">Extremidad (Ej: Mano)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="grosor">Grosor del paciente (cm):</label>
+                    <input type="number" id="grosor" placeholder="Ej: 22" required min="1">
+                </div>
+                <button type="submit" class="btn-primary">Calcular Técnica</button>
+            </form>
+
+            <!-- Resultados (Ocultos hasta calcular) -->
+            <div id="calc-result" class="result-card hidden">
+                <h3>Valores Sugeridos</h3>
+                <div class="values-grid">
+                    <div class="value-box">
+                        <span class="label">kVp</span>
+                        <span class="number" id="res-kvp">--</span>
+                    </div>
+                    <div class="value-box">
+                        <span class="label">mAs</span>
+                        <span class="number" id="res-mas">--</span>
+                    </div>
+                </div>
+                <p class="warning">⚠️ Revisa el historial del paciente para evitar sobreexposición.</p>
+            </div>
+        </section>
+
     </main>
 
-    <!-- Librería anime.js -->
+    <!-- Librerías y Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <!-- Lógica de nuestra app -->
     <script src="app.js"></script>
 </body>
 </html>
